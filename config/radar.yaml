@@ -1,0 +1,11 @@
+# Analysis parameters, loaded into the single-row `radar_params` table by `wonby build`.
+# Windows are counted back from max(award_date) in the data, never from today:
+# the source is published by fiscal year and lags the calendar by months.
+# Owned by the market-analyst.
+
+recent_window_months: 6        # mart_recent_data_awards
+target_window_months: 24       # mart_priority_targets: look-back for "recent" wins.
+                               # The market is thin (11–28 data tenders per FY, rarely >1 per
+                               # supplier per year): 12 months gave 0 targets, 24 gives a handful.
+target_min_data_tenders: 2     # mart_priority_targets: distinct data tenders in that window
+top_n: 25                      # rows shown per ranking in the Markdown report

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Generated — reproducible with `wonby ingest && wonby build && wonby report`
+data/
+output/
+
+.claude/settings.local.json
