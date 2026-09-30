@@ -1,0 +1,33 @@
+[project]
+name = "wonby"
+version = "0.1.0"
+description = "Who wins Singapore public-sector tenders: incremental DuckDB pipeline over the GeBIZ awards open data"
+readme = "README.md"
+authors = [
+    { name = "Samy Knefati" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "duckdb>=1.5.6",
+    "httpx>=0.28.1",
+    "pyyaml>=6.0.3",
+]
+
+[project.urls]
+Repository = "https://github.com/SamyKnefati/wonby"
+
+[project.scripts]
+wonby = "wonby.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

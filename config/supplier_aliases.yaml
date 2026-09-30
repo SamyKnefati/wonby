@@ -1,0 +1,11 @@
+# Manual merges of supplier_group values that belong to the same firm, applied
+# after the automatic normalisation (see CLAUDE.md > Business rules > Supplier names).
+# Key: supplier_group as computed by clean.py — value: the group to use instead.
+
+aliases:
+  ACCENTURE SG SERVICES: ACCENTURE
+  KPMG LLP: KPMG
+  KPMG SERVICES: KPMG
+  KPMG ADVISORY SERVICES: KPMG
+  NTT DATA BUSINESS SOLUTIONS SINGAPORE: NTT DATA
+  NTT DATA SINGAPORE: NTT DATA

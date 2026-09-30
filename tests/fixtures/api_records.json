@@ -1,0 +1,212 @@
+[
+  {
+    "_id": 1,
+    "tender_no": "ACR000ETT21000001",
+    "tender_description": "DESIGN, DEVELOPMENT, CUSTOMIZATION, DELIVERY, INSTALLATION, TESTING  AND COMMISSIONING A NEW FULLY OPERATIONAL UNIFIED DATA ANALYTICS PLATFORM (UDAP) SYSTEM WITH AN OPTION FOR MAINTENANCE AND ENHANCEMENT SERVICES FOR ACCOUNTING AND CORPORATE REGULARTORY AUTHORITY",
+    "agency": "Accounting And Corporate Regulatory Authority",
+    "award_date": "6/9/2021",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "ALPHA ZETTA PTE. LTD.",
+    "awarded_amt": "2321600"
+  },
+  {
+    "_id": 8,
+    "tender_no": "ACR000ETT23000002",
+    "tender_description": "SUPPLY, DELIVERY, SUPPORT OF DATABASE ACTIVITY MONITORING (DAM) SOFTWARE WITH AN OPTION FOR MAINTENANCE OF SOFTWARE",
+    "agency": "Accounting And Corporate Regulatory Authority",
+    "award_date": "18/1/2024",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "NXGEN COMMUNICATIONS PTE LTD",
+    "awarded_amt": "310676.63"
+  },
+  {
+    "_id": 13,
+    "tender_no": "AGC000ETT21000002",
+    "tender_description": "INVITATION TO TENDER FOR IT CHANGE MANAGEMENT SERVICES",
+    "agency": "Attorney-General's Chambers",
+    "award_date": "14/7/2021",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "ZENITH INFOTECH (S) PTE LTD.",
+    "awarded_amt": "2078040"
+  },
+  {
+    "_id": 19,
+    "tender_no": "AGC000ETT22000003",
+    "tender_description": "ITT for the prototyping, development, maintenance and support services for an AI-Assisted classification and taxonomy management system",
+    "agency": "Attorney-General's Chambers",
+    "award_date": "18/11/2022",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "SMART-WARES PTE. LTD.",
+    "awarded_amt": "1535000"
+  },
+  {
+    "_id": 40,
+    "tender_no": "AGC000ETT23000006",
+    "tender_description": "Provision of Agile Application Development and Maintenance services",
+    "agency": "Attorney-General's Chambers",
+    "award_date": "19/12/2023",
+    "tender_detail_status": "Awarded to No Suppliers",
+    "supplier_name": "Unknown",
+    "awarded_amt": "0"
+  },
+  {
+    "_id": 45,
+    "tender_no": "AGC000ETT24000003",
+    "tender_description": "ITT for the Comprehensive Maintenance Services of AGC Data Centers (DC) and Technical Refresh of DC Equipment",
+    "agency": "Attorney-General's Chambers",
+    "award_date": "19/6/2024",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "IX TECHNOLOGY PTE. LTD.",
+    "awarded_amt": "794710"
+  },
+  {
+    "_id": 75,
+    "tender_no": "BCA000ETT21000015",
+    "tender_description": "APPOINTMENT OF IMPLEMENTING CONSULTANTS FOR THE ESTATE UPGRADING PROGRAMME (EUP) BATCH 10 AT CHENG SAN CACTUS SUNRISE AND FULTON ESTATES",
+    "agency": "Building and Construction Authority",
+    "award_date": "14/1/2022",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "E M SERVICES PRIVATE LIMITED",
+    "awarded_amt": "16.53"
+  },
+  {
+    "_id": 447,
+    "tender_no": "CCY000ETT21000005",
+    "tender_description": "PROVISION FOR A TWO-YEAR FRAMEWORK AGREEMENT (WITH OPTION TO EXTEND UP TO ANOTHER TWO YEARS) FOR CONSULTANCY SERVICES",
+    "agency": "Ministry of Culture, Community and Youth - Ministry Headquarter",
+    "award_date": "5/6/2021",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "ASSURANCE PARTNERS LLP",
+    "awarded_amt": "1127100"
+  },
+  {
+    "_id": 448,
+    "tender_no": "CCY000ETT21000005",
+    "tender_description": "PROVISION FOR A TWO-YEAR FRAMEWORK AGREEMENT (WITH OPTION TO EXTEND UP TO ANOTHER TWO YEARS) FOR CONSULTANCY SERVICES",
+    "agency": "Ministry of Culture, Community and Youth - Ministry Headquarter",
+    "award_date": "5/6/2021",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "DELOITTE SINGAPORE ASSURANCE PTE. LTD.",
+    "awarded_amt": "1127100"
+  },
+  {
+    "_id": 449,
+    "tender_no": "CCY000ETT21000005",
+    "tender_description": "PROVISION FOR A TWO-YEAR FRAMEWORK AGREEMENT (WITH OPTION TO EXTEND UP TO ANOTHER TWO YEARS) FOR CONSULTANCY SERVICES",
+    "agency": "Ministry of Culture, Community and Youth - Ministry Headquarter",
+    "award_date": "5/6/2021",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "Ernst & Young Advisory PTE. LTD.",
+    "awarded_amt": "1127100"
+  },
+  {
+    "_id": 450,
+    "tender_no": "CCY000ETT21000005",
+    "tender_description": "PROVISION FOR A TWO-YEAR FRAMEWORK AGREEMENT (WITH OPTION TO EXTEND UP TO ANOTHER TWO YEARS) FOR CONSULTANCY SERVICES",
+    "agency": "Ministry of Culture, Community and Youth - Ministry Headquarter",
+    "award_date": "5/6/2021",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "KPMG SERVICES PTE. LTD.",
+    "awarded_amt": "1127100"
+  },
+  {
+    "_id": 1132,
+    "tender_no": "CSC000ETT20300011",
+    "tender_description": "INVITATION TO TENDER (ITT) FOR PROVISION OF TRAINING SERVICES ON INNOVATION UNDER A PERIOD CONTRACT OF ONE (1) YEAR WITH AN OPTION TO EXTEND FOR TWO (2) YEARS",
+    "agency": "Civil Service College",
+    "award_date": "30/4/2021",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "Cybiant Asia Sdn. Bhd.",
+    "awarded_amt": "18000"
+  },
+  {
+    "_id": 3623,
+    "tender_no": "HDB000ETT21000129",
+    "tender_description": "Provisioning of Business Intelligence (BI) Dashboards and Analytics for HDB Smart Hub",
+    "agency": "Housing and Development Board",
+    "award_date": "1/3/2022",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "AZENDIAN SOLUTIONS PTE. LTD.",
+    "awarded_amt": "749700"
+  },
+  {
+    "_id": 6088,
+    "tender_no": "HTX00103000020914",
+    "tender_description": "SUPPLY AND DELIVERY OF REAGENTS, CHEMICALS, GASES AND CONSUMABLES",
+    "agency": "Home Team Science and Technology Agency",
+    "award_date": "14/8/2025",
+    "tender_detail_status": "Award by interface record",
+    "supplier_name": "AIK MOH PAINTS & CHEMICALS PTE. LTD.",
+    "awarded_amt": "321066"
+  },
+  {
+    "_id": 6124,
+    "tender_no": "IMD000ETT23000009",
+    "tender_description": "Tender for the Provision Of Consultancy Services and Economic Advice in Relation to Info-Communications, Digital Regulations and Infrastructure, Data Protection and Innovation Policy/Regulatory, Security, Technical, and Economic Matters",
+    "agency": "Info-communications Media Development Authority",
+    "award_date": "24/8/2023",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "AETHA CONSULTING LIMITED",
+    "awarded_amt": "1"
+  },
+  {
+    "_id": 6125,
+    "tender_no": "IMD000ETT23000009",
+    "tender_description": "Tender for the Provision Of Consultancy Services and Economic Advice in Relation to Info-Communications, Digital Regulations and Infrastructure, Data Protection and Innovation Policy/Regulatory, Security, Technical, and Economic Matters",
+    "agency": "Info-communications Media Development Authority",
+    "award_date": "24/8/2023",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "ANALYSYS MASON LIMITED",
+    "awarded_amt": "1"
+  },
+  {
+    "_id": 6126,
+    "tender_no": "IMD000ETT23000009",
+    "tender_description": "Tender for the Provision Of Consultancy Services and Economic Advice in Relation to Info-Communications, Digital Regulations and Infrastructure, Data Protection and Innovation Policy/Regulatory, Security, Technical, and Economic Matters",
+    "agency": "Info-communications Media Development Authority",
+    "award_date": "24/8/2023",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "ANALYSYS MASON PTE. LIMITED",
+    "awarded_amt": "1"
+  },
+  {
+    "_id": 6132,
+    "tender_no": "IMD000ETT23000009",
+    "tender_description": "Tender for the Provision Of Consultancy Services and Economic Advice in Relation to Info-Communications, Digital Regulations and Infrastructure, Data Protection and Innovation Policy/Regulatory, Security, Technical, and Economic Matters",
+    "agency": "Info-communications Media Development Authority",
+    "award_date": "24/8/2023",
+    "tender_detail_status": "Awarded by Items",
+    "supplier_name": "DT Economics LLP",
+    "awarded_amt": "1"
+  },
+  {
+    "_id": 7202,
+    "tender_no": "ITE000ETT22000034",
+    "tender_description": "Q22a-00588_SSF_Purchase of Group Personal Accident Insurance Policy for ITE Full-Time Students and Alumni, and Group Hospitalisation & Surgical Insurance Policy for ITE Full-Time Students on Internships for Academic Year (AY) 2023 & 2024 with option to extend for AY2025",
+    "agency": "Institute of Technical Education",
+    "award_date": "23/12/2022",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "INCOME INSURANCE LIMITED",
+    "awarded_amt": "82"
+  },
+  {
+    "_id": 7990,
+    "tender_no": "LAWHQ0ETT22000010",
+    "tender_description": "Invitation to Tender (ITT) for Provision of Database Screening Subscription Services for Anti-Money Laundering/Countering the Financing of Terrorism Probity Checks",
+    "agency": "Ministry of Law-Ministry Headquarter",
+    "award_date": "23/3/2023",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "FACTIVA LIMITED",
+    "awarded_amt": "175606.6"
+  },
+  {
+    "_id": 15094,
+    "tender_no": "PUB000ETT21000065",
+    "tender_description": "Replacement of SCADA and PLC Systems at Ulu Pandan NEWater Pumping Station and Chemical Dosing Plant",
+    "agency": "Public Utilities Board",
+    "award_date": "2/9/2021",
+    "tender_detail_status": "Awarded to Suppliers",
+    "supplier_name": "WINSYS TECHNOLOGY PTE LTD",
+    "awarded_amt": "2285869"
+  }
+]

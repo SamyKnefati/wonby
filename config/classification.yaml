@@ -1,0 +1,105 @@
+# "Data" tender classification — scope and semantics in CLAUDE.md > Business rules.
+#
+# Patterns are case-insensitive Python regexes matched on tender_description.
+#   1. every `exclude` match is masked out of the text;
+#   2. the tender is "data" if at least one `include` matches what remains.
+# Owned by the classifier-tuner: every change comes with `wonby eval` before/after.
+# Tuned against tests/fixtures/labeled_descriptions.csv (445 rows) — see the
+# classifier-tuner report for the before/after metrics and the flip list.
+
+include:
+  - pattern: '\bdata\s+analytics?\b'
+    why: core scope — data analytics platforms and services
+  - pattern: '\bbusiness\s+intelligence\b'
+    why: BI systems and services
+  - pattern: '\bdata\b.{0,20}?\b(platforms?|warehous\w*|lakes?|hubs?)\b|\blakehouse\b'
+    why: >-
+      data platform build/maintenance; added hubs (SFA "Digital Data Hub", MPA "Maritime
+      Data Hub") and a short gap so "Data & Knowledge Platform" (MAS) and "Data
+      Visualisation Platform" (MOE) match too, not just the directly-adjacent form
+  - pattern: '\bdata\s+scien\w*'
+    why: data science services and tooling
+  - pattern: '\bmachine\s+learning\b'
+    why: ML model work
+  - pattern: '\bdashboards?\b'
+    why: reporting/BI deliverables
+  - pattern: '\bdata\s+(management|governance|quality|integration|migration|collection|processing|consultanc\w*|audit\w*|research|mining|monitoring)\b'
+    why: >-
+      data engineering/governance work; added collection/processing (e.g. MAS "Fund Data
+      Collection Services", MPA real-time data processing), consultancy/audit/research
+      (e.g. STB "Data Auditing Services", HPB "Data Research and Advisory Services"), and
+      mining/monitoring (CSC "Data Mining / Science Tool", NEA "Emissions Data Monitoring
+      and Analysis System) — all explicit in-scope deliverables per the labelling guideline
+  - pattern: '\bbig\s+data\b'
+    why: data platform work
+  - pattern: '\banalytics?\b.{0,20}?\b(systems?|platforms?|softwares?|solutions?|services?|hubs?|sandboxe?s?|networks?|portals?)\b'
+    why: >-
+      bare "analytics" (not just "data analytics") describing a built/maintained system —
+      recall gap: e.g. HDB "Logs Analytics System", SSG "Fraud Analytics Software",
+      STB "Tourism Analytics Network", MAS "Enterprise Behavioural Analytics System",
+      SFA "Analytics and Sense Making System", SPO "Analytics in Education (AiE) Systems".
+      Requires a following noun (within a short gap, so it doesn't fire on "Data
+      Analytics: Core Concepts" training-course titles or reach across an unrelated
+      sentence — checked against the full dataset, see report); masked by the
+      video-analytics exclude below so CCTV/video analytics surveillance systems (out of
+      scope) don't get swept in.
+  - pattern: '\bstatisti(?:cs?|cal)\b.{0,60}?\b(software|licen[cs]es?|systems?)\b'
+    why: >-
+      statistical software/systems — e.g. FINCED "Trade Statistic System", ITA/NPO "SPSS
+      Statistics ... Licence", TPO "Statistical Software and Licence". The gap tolerates
+      the licence boilerplate between "Statistics" and "Licence" in the SPSS tenders.
+  - pattern: '\b(artificial\s+intelligence|\bAI\b)[\s-]?(powered|driven|enabled|assisted|based)\b'
+    why: >-
+      "AI-powered/driven/enabled/assisted/based X" reliably signals a real AI deliverable
+      (CPF "AI-Driven ... Solution", AGC "AI-Assisted classification system", MOE
+      "AI-enabled Automated Marking System", TRAHQ "AI-Powered ... Sentiment Analysis")
+      as opposed to a tender that merely mentions AI in passing (training equipment,
+      policy studies) — deliberately narrower than a bare \bAI\b, which is too noisy
+      (see FP list in the report for what a blanket AI/ML include would have swept in).
+  - pattern: '\b(artificial\s+intelligence|\bAI\b)\b(?:\s*\([^)]{1,10}\))?\s+(solutions?|systems?|platforms?|models?|assistants?|chat\s+systems?)\b'
+    why: >-
+      "AI/Artificial Intelligence (AI) Solution/System/Platform/Model" — e.g. HTX
+      "Artificial Intelligence (AI) Solution" x2, RPO "Artificial Intelligence (AI) Chat
+      System". Requires the noun directly after AI (optionally through a "(AI)" gloss) so
+      it doesn't fire on "AI Technical Platform" used as the subject of a policy study, or
+      on training-equipment listings ("AI Outfit Photobooth", "MR AI Technology").
+
+exclude:
+  - pattern: '\bdata\s*cent(re|er)s?\b'
+    why: physical data-centre facilities
+  - pattern: '\bsupervisory\s+control\s+and\s+data\s+acquisition\b'
+    why: SCADA industrial control systems
+  - pattern: '\bmobile\s+data\b'
+    why: telecom plans
+  - pattern: '\banalytical\s+(balances?|instruments?|equipment)\b'
+    why: laboratory equipment
+  - pattern: '\bvideo\s+analytic\w*\b'
+    why: >-
+      CCTV/video-analytics surveillance systems (carpark monitoring, high-rise littering,
+      parking enforcement, exam proctoring) are a recurring, distinct security/computer-vision
+      market, not general data/BI work — masks them out of the new bare-"analytics" include
+      above (e.g. HDB "Video Analytics System for Carpark Operations" would otherwise match
+      "Analytics System")
+
+# Regexes used by `wonby sample` to hunt for false negatives: tenders not
+# currently classified "data" but whose description matches one of these are
+# oversampled for labelling. Same case-insensitive regex syntax as include/exclude,
+# just a flat list of patterns (no `why`). Owned by the classifier-tuner.
+sample_signals:
+  - '\bdata\b'
+  - 'analytic'
+  - 'dashboard'
+  - 'insight'
+  - 'statistic'
+  - 'visuali[sz]'
+  - 'machine\s+learning'
+  - '\bAI\b'
+  - 'intelligence'
+  - 'predictive'
+  - 'reporting'
+  - 'database'
+  - 'digital\s+platform'
+  - 'data[\s-]?(driven|led)'
+  - 'sentiment'
+  - 'chat\s*bot|chat\s+system'
+  - 'data\s+suite'
