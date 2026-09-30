@@ -37,8 +37,9 @@ data.gov.sg API ──► ingest ──► raw_awards ──► build ──► 
 
 ## Engineering notes
 
-A few decisions worth reading before touching the code (details in
-[`CLAUDE.md`](CLAUDE.md) and [`docs/dataset_profile.md`](docs/dataset_profile.md)):
+A few decisions worth reading before touching the code (full reasoning in the
+[architecture decision records](docs/adr/), details in [`CLAUDE.md`](CLAUDE.md) and
+[`docs/dataset_profile.md`](docs/dataset_profile.md)):
 
 - **No offset-based incremental.** The API sorts by tender number, not by date, so
   new awards land in the middle of the pagination; the row id is reassigned on
