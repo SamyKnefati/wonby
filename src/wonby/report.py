@@ -88,7 +88,7 @@ def _ensure_report_runs(con: duckdb.DuckDBPyConnection) -> None:
 def _radar_params(con: duckdb.DuckDBPyConnection) -> dict[str, Any]:
     keys = ["recent_window_months", "target_window_months", "target_min_data_tenders", "top_n"]
     row = con.execute(f"SELECT {', '.join(keys)} FROM radar_params").fetchone()
-    return dict(zip(keys, row))
+    return dict(zip(keys, row, strict=True))
 
 
 def _export_csvs(con: duckdb.DuckDBPyConnection, exports_dir: Path) -> None:
@@ -200,16 +200,22 @@ def _build_markdown(
     lines.append("# WonBy - marchés publics data / analytics / BI à Singapour\n")
     lines.append(f"_Généré le {_fmt_dt(generated_at)}._\n")
 
-    date_min, date_max = con.execute("SELECT min(award_date), max(award_date) FROM stg_awards").fetchone()
+    date_min, date_max = con.execute(
+        "SELECT min(award_date), max(award_date) FROM stg_awards"
+    ).fetchone()
     n_tenders = con.execute("SELECT count(DISTINCT tender_no) FROM stg_awards").fetchone()[0]
-    n_data_tenders = con.execute("SELECT count(*) FROM tender_classification WHERE is_data").fetchone()[0]
+    n_data_tenders = con.execute(
+        "SELECT count(*) FROM tender_classification WHERE is_data"
+    ).fetchone()[0]
     source_last_updated = _source_last_updated_at(con)
 
     lines.append("## Couverture et fraîcheur des données\n")
     lines.append(f"- Fenêtre de données : {_fmt_date(date_min)} → {_fmt_date(date_max)}")
     lines.append(f"- Date d'ancrage (dernière attribution connue) : **{_fmt_date(anchor_date)}**")
     lines.append(f"- Dernière mise à jour de la source GeBIZ : {source_last_updated or 'n/d'}")
-    lines.append(f"- Tenders \"data\" identifiés : **{n_data_tenders}** sur {n_tenders} tenders au total\n")
+    lines.append(
+        f'- Tenders "data" identifiés : **{n_data_tenders}** sur {n_tenders} tenders au total\n'
+    )
 
     lines.extend(_priority_targets_section(con, params))
     lines.extend(_nouveautes_section(con, baseline))
@@ -240,8 +246,14 @@ def _priority_targets_section(con: duckdb.DuckDBPyConnection, params: dict[str, 
         return lines
 
     for (
-        display_name, n_recent, n_all_time, n_quarters,
-        last_award, agencies_recent, recent_desc, amt_excl_shared,
+        display_name,
+        n_recent,
+        n_all_time,
+        n_quarters,
+        last_award,
+        agencies_recent,
+        recent_desc,
+        amt_excl_shared,
     ) in targets:
         lines.append(f"### {_cell(display_name)}\n")
         lines.append(
@@ -253,7 +265,9 @@ def _priority_targets_section(con: duckdb.DuckDBPyConnection, params: dict[str, 
         )
         lines.append(f"- Dernière attribution : {_fmt_date(last_award)}")
         lines.append(f"- Agences récentes : {_cell(agencies_recent) or 'n/d'}")
-        lines.append(f"- Montant récent hors montants partagés/nominaux : {_fmt_amount(amt_excl_shared)}")
+        lines.append(
+            f"- Montant récent hors montants partagés/nominaux : {_fmt_amount(amt_excl_shared)}"
+        )
         for d in recent_desc or []:
             lines.append(f"  - {_cell(d)}")
         lines.append("")
@@ -285,10 +299,14 @@ def _nouveautes_section(con: duckdb.DuckDBPyConnection, baseline: Any) -> list[s
     ).fetchall()
 
     if not new_rows:
-        lines.append(f"Aucune nouvelle attribution data depuis le rapport comparable précédent ({baseline_label}).\n")
+        lines.append(
+            f"Aucune nouvelle attribution data depuis le rapport comparable précédent ({baseline_label}).\n"
+        )
         return lines
 
-    lines.append(f"{len(new_rows)} nouvelle(s) attribution(s) data depuis le rapport comparable précédent ({baseline_label}) :\n")
+    lines.append(
+        f"{len(new_rows)} nouvelle(s) attribution(s) data depuis le rapport comparable précédent ({baseline_label}) :\n"
+    )
     lines.append("| Date | Fournisseur | Agence | Description | Montant |")
     lines.append("|---|---|---|---|---|")
     for award_date, supplier_group, agency, descr, amt, is_no_supplier, shared, nominal in new_rows:
@@ -314,7 +332,9 @@ def _top_suppliers_section(con: duckdb.DuckDBPyConnection, params: dict[str, Any
         """,
         [params["top_n"]],
     ).fetchall()
-    lines.append("| Fournisseur | Tenders | Awards | Montant total | Montant hors partagé | 1re attrib. | Dernière attrib. | Agences |")
+    lines.append(
+        "| Fournisseur | Tenders | Awards | Montant total | Montant hors partagé | 1re attrib. | Dernière attrib. | Agences |"
+    )
     lines.append("|---|---|---|---|---|---|---|---|")
     for name, n_t, n_a, total_amt, total_excl, first_d, last_d, n_ag in rows:
         lines.append(
@@ -340,7 +360,9 @@ def _top_agencies_section(con: duckdb.DuckDBPyConnection, params: dict[str, Any]
     lines.append("| Agence | Tenders | Montant total | Fournisseurs distincts | Dernière attrib. |")
     lines.append("|---|---|---|---|---|")
     for agency, n_t, total_amt, n_sup, last_d in rows:
-        lines.append(f"| {_cell(agency)} | {n_t} | {_fmt_amount(total_amt)} | {n_sup} | {_fmt_date(last_d)} |")
+        lines.append(
+            f"| {_cell(agency)} | {n_t} | {_fmt_amount(total_amt)} | {n_sup} | {_fmt_date(last_d)} |"
+        )
     lines.append("")
     return lines
 
@@ -348,7 +370,9 @@ def _top_agencies_section(con: duckdb.DuckDBPyConnection, params: dict[str, Any]
 def _recent_awards_section(con: duckdb.DuckDBPyConnection, params: dict[str, Any]) -> list[str]:
     total = _count(con, "mart_recent_data_awards")
     shown = min(params["top_n"], total)
-    lines = [f"## Attributions data récentes (derniers {params['recent_window_months']} mois — {shown} sur {total})\n"]
+    lines = [
+        f"## Attributions data récentes (derniers {params['recent_window_months']} mois — {shown} sur {total})\n"
+    ]
     rows = con.execute(
         """
         SELECT award_date, supplier_group, agency, tender_description, awarded_amt,

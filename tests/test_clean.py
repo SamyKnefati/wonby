@@ -12,7 +12,6 @@ from wonby.clean import (
     supplier_group,
 )
 
-
 # --- parse_award_date ---------------------------------------------------------
 
 
@@ -107,7 +106,10 @@ def test_normalize_supplier_name_collapses_whitespace_and_punctuation():
 def test_normalize_supplier_name_does_not_strip_mid_word():
     # "LIMITED" only at the very end, on a word boundary, gets canonicalised —
     # a firm literally named "... LIMITED EDITION" is untouched.
-    assert normalize_supplier_name("WIDGETS LIMITED EDITION PTE LTD") == "WIDGETS LIMITED EDITION PTE LTD"
+    assert (
+        normalize_supplier_name("WIDGETS LIMITED EDITION PTE LTD")
+        == "WIDGETS LIMITED EDITION PTE LTD"
+    )
 
 
 def test_normalize_supplier_name_does_not_mangle_income():

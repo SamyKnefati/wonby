@@ -67,9 +67,7 @@ def load_classification_config(path: Path) -> ClassificationConfig:
     data = yaml.safe_load(path.read_text()) or {}
     include = _compile_patterns(data.get("include") or [])
     exclude = _compile_patterns(data.get("exclude") or [])
-    sample_signals = tuple(
-        re.compile(p, re.IGNORECASE) for p in (data.get("sample_signals") or [])
-    )
+    sample_signals = tuple(re.compile(p, re.IGNORECASE) for p in (data.get("sample_signals") or []))
     return ClassificationConfig(
         include=include,
         exclude=exclude,

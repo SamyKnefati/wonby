@@ -8,7 +8,6 @@ import logging
 import random
 import sys
 from pathlib import Path
-from typing import Any
 
 import duckdb
 
@@ -104,9 +103,13 @@ def _print_eval_result(label: str, result: classify_module.EvalResult) -> None:
         f"fn={result.false_negatives} tn={result.true_negatives})"
     )
     for row in result.false_positive_rows:
-        print(f"  FP {row.tender_no}: {row.tender_description[:80]!r} matched={row.matched_includes}")
+        print(
+            f"  FP {row.tender_no}: {row.tender_description[:80]!r} matched={row.matched_includes}"
+        )
     for row in result.false_negative_rows:
-        print(f"  FN {row.tender_no}: {row.tender_description[:80]!r} excluded_by={row.matched_excludes}")
+        print(
+            f"  FN {row.tender_no}: {row.tender_description[:80]!r} excluded_by={row.matched_excludes}"
+        )
 
 
 def _stg_tenders(con: duckdb.DuckDBPyConnection) -> list[tuple[str, str]]:
@@ -201,7 +204,15 @@ def cmd_sample(args: argparse.Namespace) -> None:
     out = Path(args.out).open("w", newline="", encoding="utf-8") if args.out else sys.stdout
     try:
         writer = csv.writer(out)
-        writer.writerow(["tender_no", "predicted_is_data", "matched_includes", "matched_excludes", "tender_description"])
+        writer.writerow(
+            [
+                "tender_no",
+                "predicted_is_data",
+                "matched_includes",
+                "matched_excludes",
+                "tender_description",
+            ]
+        )
         for tender_no, description in chosen:
             result = results[tender_no]
             writer.writerow(
@@ -222,12 +233,16 @@ def cmd_sample(args: argparse.Namespace) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="wonby", description="WonBy: who wins Singapore public tenders")
+    parser = argparse.ArgumentParser(
+        prog="wonby", description="WonBy: who wins Singapore public tenders"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_ingest = sub.add_parser("ingest", help="incremental load from the API")
     p_ingest.add_argument("--full", action="store_true", help="ignore the metadata skip-check")
-    p_ingest.add_argument("--accept-removals", action="store_true", help="bypass the mass-removal guard")
+    p_ingest.add_argument(
+        "--accept-removals", action="store_true", help="bypass the mass-removal guard"
+    )
     p_ingest.set_defaults(func=cmd_ingest)
 
     p_build = sub.add_parser("build", help="rebuild stg_awards, tender_classification, marts")
@@ -237,15 +252,23 @@ def build_parser() -> argparse.ArgumentParser:
     p_report.set_defaults(func=cmd_report)
 
     p_eval = sub.add_parser("eval", help="classifier precision/recall on the labelled set")
-    p_eval.add_argument("--config", help="path to a classification.yaml (default: config/classification.yaml)")
+    p_eval.add_argument(
+        "--config", help="path to a classification.yaml (default: config/classification.yaml)"
+    )
     p_eval.add_argument("--against", help="compare against another classification.yaml")
-    p_eval.add_argument("--labels", help="path to the labelled CSV (default: tests/fixtures/labeled_descriptions.csv)")
+    p_eval.add_argument(
+        "--labels",
+        help="path to the labelled CSV (default: tests/fixtures/labeled_descriptions.csv)",
+    )
     p_eval.set_defaults(func=cmd_eval)
 
     p_sample = sub.add_parser("sample", help="fresh tenders to label")
     p_sample.add_argument("--n", type=int, default=60)
     p_sample.add_argument("--seed", type=int, default=0)
-    p_sample.add_argument("--labels", help="path to the labelled CSV to exclude (default: tests/fixtures/labeled_descriptions.csv)")
+    p_sample.add_argument(
+        "--labels",
+        help="path to the labelled CSV to exclude (default: tests/fixtures/labeled_descriptions.csv)",
+    )
     p_sample.add_argument("--out", help="output CSV path (default: stdout)")
     p_sample.set_defaults(func=cmd_sample)
 
@@ -254,7 +277,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     # WARNING by default: the commands print their own one-line summaries.
-    logging.basicConfig(level=logging.WARNING, stream=sys.stderr, format="%(levelname)s %(name)s: %(message)s")
+    logging.basicConfig(
+        level=logging.WARNING, stream=sys.stderr, format="%(levelname)s %(name)s: %(message)s"
+    )
 
     parser = build_parser()
     args = parser.parse_args(argv)

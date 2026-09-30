@@ -1,5 +1,7 @@
 # WonBy
 
+[![CI](https://github.com/SamyKnefati/wonby/actions/workflows/ci.yml/badge.svg)](https://github.com/SamyKnefati/wonby/actions/workflows/ci.yml)
+
 **Who wins Singapore public-sector tenders — and who will need to staff them.**
 
 WonBy turns the official record of Singapore government contract awards into a
@@ -67,6 +69,7 @@ uv run wonby ingest     # incremental load from data.gov.sg into data/wonby.duck
 uv run wonby build      # clean, classify, rebuild the analysis views
 uv run wonby report     # output/reports/radar_<date>.md + output/exports/*.csv
 uv run pytest -q        # 123 tests, no network
+uv run ruff check && uv run ruff format --check   # lint + formatting, as in CI
 ```
 
 | Command | What it does |
@@ -97,7 +100,6 @@ test suite after every Python edit. Open Claude Code in this directory to use th
 
 ## Roadmap
 
-- CI on GitHub Actions
 - FastAPI service exposing the views
 - Multi-theme classification (IT, consulting, construction…) with an LLM,
   evaluated against the keyword baseline

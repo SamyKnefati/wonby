@@ -39,7 +39,9 @@ def _load_yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text()) or {}
 
 
-def _stage_json_rows(con: duckdb.DuckDBPyConnection, records: list[dict[str, Any]], stage_name: str) -> None:
+def _stage_json_rows(
+    con: duckdb.DuckDBPyConnection, records: list[dict[str, Any]], stage_name: str
+) -> None:
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
         json.dump(records, f, default=str)
         tmp_path = f.name
@@ -62,7 +64,9 @@ _STG_CLEAN_EMPTY_SCHEMA = """
 """
 
 
-def _clean_active_rows(con: duckdb.DuckDBPyConnection, aliases: dict[str, str]) -> list[dict[str, Any]]:
+def _clean_active_rows(
+    con: duckdb.DuckDBPyConnection, aliases: dict[str, str]
+) -> list[dict[str, Any]]:
     """Read active raw rows and apply the pure clean.py functions in Python.
 
     `con.create_function` (DuckDB Python UDFs) unconditionally requires numpy
@@ -82,8 +86,14 @@ def _clean_active_rows(con: duckdb.DuckDBPyConnection, aliases: dict[str, str]) 
 
     cleaned: list[dict[str, Any]] = []
     for (
-        tender_no, tender_description, agency, tender_detail_status,
-        supplier_name_raw, award_date_raw, awarded_amt_raw, first_seen_at,
+        tender_no,
+        tender_description,
+        agency,
+        tender_detail_status,
+        supplier_name_raw,
+        award_date_raw,
+        awarded_amt_raw,
+        first_seen_at,
     ) in rows:
         norm = normalize_supplier_name(supplier_name_raw or "")
         group = apply_aliases(supplier_group(norm), aliases)

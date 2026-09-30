@@ -21,10 +21,20 @@ from wonby import report, settings
 TS0 = datetime(2024, 1, 1, 0, 0, 0)  # first_seen_at shared by every row built below
 
 STG_COLUMNS = [
-    "tender_no", "tender_description", "agency", "tender_detail_status",
-    "supplier_name_raw", "supplier_name_norm", "supplier_group",
-    "award_date", "fiscal_year", "awarded_amt", "is_no_supplier",
-    "n_suppliers_in_tender", "amt_shared_across_suppliers", "is_nominal_amt",
+    "tender_no",
+    "tender_description",
+    "agency",
+    "tender_detail_status",
+    "supplier_name_raw",
+    "supplier_name_norm",
+    "supplier_group",
+    "award_date",
+    "fiscal_year",
+    "awarded_amt",
+    "is_no_supplier",
+    "n_suppliers_in_tender",
+    "amt_shared_across_suppliers",
+    "is_nominal_amt",
     "first_seen_at",
 ]
 CLASS_COLUMNS = ["tender_no", "is_data", "matched_includes", "matched_excludes", "config_hash"]
@@ -35,21 +45,39 @@ def _fiscal_year(d: date) -> int:
 
 
 def _stg_row(
-    tender_no: str, description: str, agency: str, supplier: str | None,
-    award_date: date, amount: float, *,
-    is_no_supplier: bool = False, n_suppliers: int = 1,
-    shared: bool = False, nominal: bool = False, first_seen_at: datetime = TS0,
+    tender_no: str,
+    description: str,
+    agency: str,
+    supplier: str | None,
+    award_date: date,
+    amount: float,
+    *,
+    is_no_supplier: bool = False,
+    n_suppliers: int = 1,
+    shared: bool = False,
+    nominal: bool = False,
+    first_seen_at: datetime = TS0,
 ) -> tuple:
     if is_no_supplier:
         supplier_raw, supplier_norm, supplier_group = "Unknown", "UNKNOWN", "UNKNOWN"
     else:
         supplier_raw = supplier_norm = supplier_group = supplier
     return (
-        tender_no, description, agency,
+        tender_no,
+        description,
+        agency,
         "Awarded to No Suppliers" if is_no_supplier else "Awarded",
-        supplier_raw, supplier_norm, supplier_group,
-        award_date, _fiscal_year(award_date), amount, is_no_supplier,
-        n_suppliers, shared, nominal, first_seen_at,
+        supplier_raw,
+        supplier_norm,
+        supplier_group,
+        award_date,
+        _fiscal_year(award_date),
+        amount,
+        is_no_supplier,
+        n_suppliers,
+        shared,
+        nominal,
+        first_seen_at,
     )
 
 
@@ -60,28 +88,56 @@ FIXTURE_ROWS = [
     # Group 1 — anchored windows (mart_recent_data_awards)
     _stg_row("WIN01", "Data analytics platform", "WINAG", "WINSUP", date(2024, 6, 30), 1000),
     _stg_row("WIN02", "Data analytics platform", "WINAG", "WINSUP", date(2023, 1, 1), 2000),
-
     # Group 2 — priority-target threshold (target_min_data_tenders = 2)
     _stg_row("TH2A", "Data analytics dashboard build", "AG_TH", "THRESH2", date(2024, 6, 15), 5000),
     _stg_row("TH2B", "Data warehouse migration", "AG_TH", "THRESH2", date(2024, 4, 1), 5000),
     _stg_row("TH1A", "Business intelligence rollout", "AG_TH", "THRESH1", date(2024, 6, 10), 5000),
-
     # Group 3 — shared amount dedup (agency) + total_amt_excl_shared (supplier)
-    _stg_row("SHARE01", "Data platform build, joint award", "AG_SHARE", "SHSUP_X", date(2024, 6, 12), 90000, n_suppliers=2, shared=True),
-    _stg_row("SHARE01", "Data platform build, joint award", "AG_SHARE", "SHSUP_Y", date(2024, 6, 12), 90000, n_suppliers=2, shared=True),
+    _stg_row(
+        "SHARE01",
+        "Data platform build, joint award",
+        "AG_SHARE",
+        "SHSUP_X",
+        date(2024, 6, 12),
+        90000,
+        n_suppliers=2,
+        shared=True,
+    ),
+    _stg_row(
+        "SHARE01",
+        "Data platform build, joint award",
+        "AG_SHARE",
+        "SHSUP_Y",
+        date(2024, 6, 12),
+        90000,
+        n_suppliers=2,
+        shared=True,
+    ),
     _stg_row("SOLOX", "Data quality audit", "AG_SHARE", "SHSUP_X", date(2024, 6, 1), 10000),
-
     # Group 4 — no-supplier tender, excluded from every supplier ranking
-    _stg_row("NOSUP01", "Data governance framework", "AG_NOSUP", None, date(2024, 6, 8), 0, is_no_supplier=True),
-
+    _stg_row(
+        "NOSUP01",
+        "Data governance framework",
+        "AG_NOSUP",
+        None,
+        date(2024, 6, 8),
+        0,
+        is_no_supplier=True,
+    ),
     # Group 5 — non-"data" tender (same supplier/agency as group 2): must be fully excluded
-    _stg_row("NOTDATA01", "Canteen renovation works", "AG_TH", "THRESH2", date(2024, 6, 20), 999999),
+    _stg_row(
+        "NOTDATA01", "Canteen renovation works", "AG_TH", "THRESH2", date(2024, 6, 20), 999999
+    ),
 ]
 
 DATA_FLAG = {
-    "WIN01": True, "WIN02": True,
-    "TH2A": True, "TH2B": True, "TH1A": True,
-    "SHARE01": True, "SOLOX": True,
+    "WIN01": True,
+    "WIN02": True,
+    "TH2A": True,
+    "TH2B": True,
+    "TH1A": True,
+    "SHARE01": True,
+    "SOLOX": True,
     "NOSUP01": True,
     "NOTDATA01": False,
 }
@@ -162,13 +218,17 @@ def test_anchored_window_excludes_old_row_and_includes_recent_one(con):
     # If the SQL wrongly used current_date, WIN01 (2024-06-30) would be excluded
     # too (today is years later) — so asserting WIN01 IS present is what actually
     # proves anchoring, not just that the far-older WIN02 is excluded.
-    tenders = {r[0] for r in con.execute("SELECT tender_no FROM mart_recent_data_awards").fetchall()}
+    tenders = {
+        r[0] for r in con.execute("SELECT tender_no FROM mart_recent_data_awards").fetchall()
+    }
     assert "WIN01" in tenders
     assert "WIN02" not in tenders
 
 
 def test_priority_target_threshold(con):
-    groups = {r[0] for r in con.execute("SELECT supplier_group FROM mart_priority_targets").fetchall()}
+    groups = {
+        r[0] for r in con.execute("SELECT supplier_group FROM mart_priority_targets").fetchall()
+    }
     assert "THRESH2" in groups  # 2 distinct recent data tenders, meets target_min_data_tenders=2
     assert "THRESH1" not in groups  # only 1
 
@@ -199,15 +259,24 @@ def test_total_amt_excl_shared_drops_shared_and_nominal_rows(con):
 
 
 def test_no_supplier_rows_excluded_from_supplier_rankings(con):
-    assert con.execute(
-        "SELECT count(*) FROM mart_top_data_suppliers WHERE supplier_group = 'UNKNOWN'"
-    ).fetchone()[0] == 0
-    assert con.execute(
-        "SELECT count(*) FROM mart_supplier_agencies WHERE supplier_group = 'UNKNOWN'"
-    ).fetchone()[0] == 0
-    assert con.execute(
-        "SELECT count(*) FROM mart_priority_targets WHERE supplier_group = 'UNKNOWN'"
-    ).fetchone()[0] == 0
+    assert (
+        con.execute(
+            "SELECT count(*) FROM mart_top_data_suppliers WHERE supplier_group = 'UNKNOWN'"
+        ).fetchone()[0]
+        == 0
+    )
+    assert (
+        con.execute(
+            "SELECT count(*) FROM mart_supplier_agencies WHERE supplier_group = 'UNKNOWN'"
+        ).fetchone()[0]
+        == 0
+    )
+    assert (
+        con.execute(
+            "SELECT count(*) FROM mart_priority_targets WHERE supplier_group = 'UNKNOWN'"
+        ).fetchone()[0]
+        == 0
+    )
 
     # but it's still a real award row, kept (and flagged) in the raw recent-awards feed
     flagged = con.execute(
@@ -218,8 +287,11 @@ def test_no_supplier_rows_excluded_from_supplier_rankings(con):
 
 def test_non_data_tender_fully_excluded(con):
     for mart in (
-        "mart_top_data_suppliers", "mart_top_data_agencies",
-        "mart_recent_data_awards", "mart_supplier_agencies", "mart_priority_targets",
+        "mart_top_data_suppliers",
+        "mart_top_data_agencies",
+        "mart_recent_data_awards",
+        "mart_supplier_agencies",
+        "mart_priority_targets",
     ):
         rows = con.execute(f"SELECT * FROM {mart}").fetchall()
         cols = [d[0] for d in con.description]
@@ -237,7 +309,9 @@ def test_non_data_tender_fully_excluded(con):
 
 
 def _section(markdown: str, heading: str) -> str:
-    m = re.search(rf"^## {re.escape(heading)}\n(.*?)(?=^## |\Z)", markdown, re.MULTILINE | re.DOTALL)
+    m = re.search(
+        rf"^## {re.escape(heading)}\n(.*?)(?=^## |\Z)", markdown, re.MULTILINE | re.DOTALL
+    )
     assert m, f"section {heading!r} not found in report"
     return m.group(1)
 
@@ -276,7 +350,9 @@ def test_nouveautes_first_report_says_so(db_path, tmp_path):
     report_path = report.run(db_path, output_dir)
     section = _section(report_path.read_text(encoding="utf-8"), "Nouveautés")
     assert "Premier rapport" in section
-    assert "attributions data récentes" in section.lower() or "attributions data r" in section.lower()
+    assert (
+        "attributions data récentes" in section.lower() or "attributions data r" in section.lower()
+    )
 
 
 def test_nouveautes_stable_then_new_rows_appear(db_path, tmp_path):
@@ -294,12 +370,20 @@ def test_nouveautes_stable_then_new_rows_appear(db_path, tmp_path):
     # Simulate a fresh ingest: a new data award with a later first_seen_at.
     con2 = duckdb.connect(str(db_path))
     try:
-        _insert_stg_rows(con2, [
-            _stg_row(
-                "NEW01", "New data analytics award", "AG_NEW", "NEWSUP",
-                date(2024, 6, 29), 7000, first_seen_at=TS0 + timedelta(days=1),
-            )
-        ])
+        _insert_stg_rows(
+            con2,
+            [
+                _stg_row(
+                    "NEW01",
+                    "New data analytics award",
+                    "AG_NEW",
+                    "NEWSUP",
+                    date(2024, 6, 29),
+                    7000,
+                    first_seen_at=TS0 + timedelta(days=1),
+                )
+            ],
+        )
         _insert_class_rows(con2, {"NEW01": True})
     finally:
         con2.close()
