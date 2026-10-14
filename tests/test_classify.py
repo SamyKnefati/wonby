@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 
 from wonby import settings
@@ -29,9 +27,7 @@ def make_config(include, exclude, sample_signals=()):
 
 
 def test_masking_excludes_without_includes_is_not_data():
-    config = make_config(
-        include=[r"\bdata\s+analytics?\b"], exclude=[r"\bdata\s*cent(re|er)s?\b"]
-    )
+    config = make_config(include=[r"\bdata\s+analytics?\b"], exclude=[r"\bdata\s*cent(re|er)s?\b"])
     result = classify("Comprehensive maintenance of the data centre", config)
     assert result.is_data is False
     assert result.matched_excludes == [r"\bdata\s*cent(re|er)s?\b"]
@@ -39,9 +35,7 @@ def test_masking_excludes_without_includes_is_not_data():
 
 
 def test_masking_leaves_remainder_for_includes():
-    config = make_config(
-        include=[r"\bdata\s+analytics?\b"], exclude=[r"\bdata\s*cent(re|er)s?\b"]
-    )
+    config = make_config(include=[r"\bdata\s+analytics?\b"], exclude=[r"\bdata\s*cent(re|er)s?\b"])
     result = classify("data centre and data analytics platform", config)
     assert result.is_data is True
     assert result.matched_includes == [r"\bdata\s+analytics?\b"]
@@ -85,12 +79,7 @@ def test_load_real_classification_config():
 
 
 def test_config_hash_stable_for_same_content(tmp_path):
-    body = (
-        "include:\n"
-        "  - pattern: 'foo'\n"
-        "    why: test\n"
-        "exclude: []\n"
-    )
+    body = "include:\n  - pattern: 'foo'\n    why: test\nexclude: []\n"
     p1 = tmp_path / "a.yaml"
     p1.write_text(body)
     p2 = tmp_path / "b.yaml"

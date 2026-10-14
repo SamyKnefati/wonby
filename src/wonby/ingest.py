@@ -9,10 +9,11 @@ from __future__ import annotations
 import json
 import logging
 import tempfile
+from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import duckdb
 
@@ -39,7 +40,7 @@ class IngestError(RuntimeError):
 
 def _utcnow() -> datetime:
     # DuckDB TIMESTAMP columns drop tzinfo without converting: only ever store UTC.
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 @dataclass(frozen=True)
@@ -124,8 +125,16 @@ def _insert_run_row(
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         [
-            started_at, finished_at, status, source_last_updated_at,
-            api_total, fetched, inserted, updated, removed, error,
+            started_at,
+            finished_at,
+            status,
+            source_last_updated_at,
+            api_total,
+            fetched,
+            inserted,
+            updated,
+            removed,
+            error,
         ],
     )
 
@@ -144,22 +153,21 @@ def _validate_records(records: list[dict[str, Any]]) -> None:
         seen.add(key)
     if duplicates:
         sample = sorted(duplicates)[:5]
-        raise IngestError(f"{len(duplicates)} duplicate (tender_no, supplier_name) keys, e.g. {sample}")
+        raise IngestError(
+            f"{len(duplicates)} duplicate (tender_no, supplier_name) keys, e.g. {sample}"
+        )
 
 
 def _stage_records(con: duckdb.DuckDBPyConnection, records: list[dict[str, Any]]) -> None:
     """Load fetched records into a TEMP table without row-by-row inserts, via
     a staged JSON file (avoids ~18k executemany round trips)."""
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".json", delete=False, encoding="utf-8"
-    ) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
         json.dump(records, f)
         tmp_path = f.name
     try:
         con.execute("DROP TABLE IF EXISTS stg_fetch")
         con.execute(
-            "CREATE TEMP TABLE stg_fetch AS "
-            "SELECT * FROM read_json(?, format = 'array')",
+            "CREATE TEMP TABLE stg_fetch AS SELECT * FROM read_json(?, format = 'array')",
             [tmp_path],
         )
     finally:
@@ -370,7 +378,10 @@ def run(
     )
     logger.info(
         "ingest success: fetched=%d inserted=%d updated=%d removed=%d",
-        len(records), inserted, updated, removed,
+        len(records),
+        inserted,
+        updated,
+        removed,
     )
     return IngestRunResult(
         status="success",

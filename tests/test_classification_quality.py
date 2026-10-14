@@ -8,8 +8,8 @@ precision >= 0.85 — the recall floor below is exactly that target).
 """
 
 from wonby import settings
-from wonby.cli import _load_labels
 from wonby.classify import evaluate, load_classification_config
+from wonby.cli import _load_labels
 
 PRECISION_FLOOR = 0.83
 RECALL_FLOOR = 0.90

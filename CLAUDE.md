@@ -37,6 +37,7 @@ uv run wonby report                      # CSV exports + Markdown report in outp
 uv run wonby eval [--config P] [--against P]   # classifier precision/recall on the labelled set
 uv run wonby sample [--n N] [--seed S]   # fresh tenders to label (excludes already-labelled ones)
 uv run pytest -q                         # tests (no network)
+uv run ruff check && uv run ruff format --check   # lint + formatting (CI runs both)
 ```
 
 Paths default to the project root (`data/wonby.duckdb`, `config/`, `output/`);
@@ -157,6 +158,9 @@ data/, output/  generated, gitignored
   and after, and new labelled rows in `tests/fixtures/labeled_descriptions.csv`
   for each false positive/negative it fixes.
 - A PostToolUse hook runs `uv run pytest -q -x` after each edit of a `.py` file.
+- Work goes through small pull requests, never direct pushes to `main`: CI
+  (`.github/workflows/ci.yml` - ruff + pytest on Python 3.11 and 3.13) must be
+  green before merging.
 
 ## Subagents (`.claude/agents/`) and commands (`.claude/commands/`)
 

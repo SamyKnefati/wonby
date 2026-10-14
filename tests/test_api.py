@@ -1,5 +1,3 @@
-import json
-
 import httpx
 import pytest
 
@@ -258,7 +256,10 @@ def test_fetch_all_records_retries_429_mid_pagination():
 
     transport = httpx.MockTransport(handler)
     result = fetch_all_records(
-        transport=transport, sleep=no_sleep, rng=fixed_rng, page_size=1,
+        transport=transport,
+        sleep=no_sleep,
+        rng=fixed_rng,
+        page_size=1,
         retry=RetryConfig(max_attempts=3),
     )
     assert len(result) == 2
