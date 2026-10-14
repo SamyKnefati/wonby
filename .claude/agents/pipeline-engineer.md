@@ -1,6 +1,6 @@
 ---
 name: pipeline-engineer
-description: Writes and maintains the data pipeline code of wonby — the data.gov.sg API client (pagination, retries, rate limit), the incremental MERGE into DuckDB (raw_awards, ingest_runs), the cleaning/normalisation layer (clean.py, stg_awards), the classification engine code (classify.py, `wonby eval`, `wonby sample`), build.py and the `wonby` CLI, with their tests. Use for any change to src/wonby/{api,ingest,clean,classify,build,cli}.py or their tests. Not for keyword tuning (classifier-tuner) nor for analysis views/reports (market-analyst).
+description: Writes and maintains the data pipeline code of wonby — the data.gov.sg API client (pagination, retries, rate limit), the incremental MERGE into DuckDB (raw_awards, ingest_runs), the cleaning/normalisation layer (clean.py, stg_awards), the classification engine code (classify.py, `wonby eval`, `wonby sample`), build.py and the `wonby` CLI, with their tests. Use for any change to src/wonby/{datagov,ingest,clean,classify,build,cli}.py or their tests. Not for keyword tuning (classifier-tuner) nor for analysis views/reports (market-analyst).
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: sonnet
 ---

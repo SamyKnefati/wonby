@@ -51,7 +51,7 @@ config/classification.yaml   include/exclude regexes for "data" tenders (owned b
 config/radar.yaml            analysis parameters: windows, thresholds, top_n (owned by market-analyst)
 config/supplier_aliases.yaml manual supplier_group merges, e.g. two entities of one firm
 src/wonby/
-  api.py        data.gov.sg client: metadata, pagination, retries/backoff — I/O only
+  datagov.py    data.gov.sg client: metadata, pagination, retries/backoff — I/O only
   ingest.py     incremental MERGE into raw_awards + ingest_runs
   clean.py      pure functions: supplier normalisation, amounts, dates, fiscal year
   classify.py   pure classification engine (config → is_data + matched patterns) + eval/sample helpers
@@ -76,7 +76,7 @@ data/, output/  generated, gitignored
 | `mart_*` | build (sql/) | analysis views, read by report and exports |
 | `report_runs` | report | one row per report: generated_at, data watermark, file path |
 
-## Ingestion semantics — read before touching api.py / ingest.py
+## Ingestion semantics — read before touching datagov.py / ingest.py
 
 - **No offset-based incremental.** The API returns rows sorted by `tender_no`,
   not by date, so new awards land in the middle of the pagination; and `_id` is a
@@ -146,7 +146,7 @@ data/, output/  generated, gitignored
 
 ## Conventions
 
-- I/O stays in `api.py`, `ingest.py`, `build.py`, `report.py`, `cli.py`;
+- I/O stays in `datagov.py`, `ingest.py`, `build.py`, `report.py`, `cli.py`;
   `clean.py` and `classify.py` are pure and fully unit-tested.
 - Type hints everywhere, `logging` for diagnostics, `print` only for CLI output.
 - SQL: one view per `sql/mart_*.sql` file; views read only `stg_awards`,
@@ -167,7 +167,7 @@ data/, output/  generated, gitignored
 | Agent | Model | Delegate when |
 |---|---|---|
 | `dataset-explorer` | sonnet | profiling / "what does the data look like" — read-only |
-| `pipeline-engineer` | sonnet | api, ingest, clean, classify engine, build, cli code + tests |
+| `pipeline-engineer` | sonnet | datagov, ingest, clean, classify engine, build, cli code + tests |
 | `classifier-tuner` | sonnet | classification quality: label samples, adjust keywords, measure |
 | `market-analyst` | sonnet | mart views, exports, report, "Cibles prioritaires" |
 | `code-reviewer` | sonnet | after each significant step — read-only review |

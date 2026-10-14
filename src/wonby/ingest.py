@@ -17,7 +17,7 @@ from typing import Any
 
 import duckdb
 
-from . import api
+from . import datagov
 from .settings import DATASET_ID
 
 logger = logging.getLogger(__name__)
@@ -207,8 +207,10 @@ def run(
     fetch_all_records: FetchAllRecordsFn | None = None,
     now: NowFn = _utcnow,
 ) -> IngestRunResult:
-    fetch_metadata = fetch_metadata or api.fetch_metadata
-    fetch_all_records = fetch_all_records or (lambda: api.fetch_all_records(dataset_id=DATASET_ID))
+    fetch_metadata = fetch_metadata or datagov.fetch_metadata
+    fetch_all_records = fetch_all_records or (
+        lambda: datagov.fetch_all_records(dataset_id=DATASET_ID)
+    )
 
     ensure_schema(con)
     started_at = now()

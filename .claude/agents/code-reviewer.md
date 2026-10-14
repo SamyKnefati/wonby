@@ -13,7 +13,7 @@ contract you review against.
 
 1. **Tests**: `uv run pytest -q` passes. Then look at what is *not* tested on the
    risky paths below; a missing test for a risky path is a finding.
-2. **Pagination** (`api.py`): stops on `offset >= total` and on an empty page; no
+2. **Pagination** (`datagov.py`): stops on `offset >= total` and on an empty page; no
    infinite loop if the API misbehaves; detects `total` changing between pages;
    verifies fetched count == total; page size honoured.
 3. **Retries**: 429, 5xx, timeouts and transport errors retried with bounded
