@@ -11,3 +11,4 @@ consequences (after Michael Nygard).
 | [0003](0003-keyword-classification-with-masking.md) | Keyword classification with masking exclusions, measured on a labelled set | Accepted |
 | [0004](0004-windows-anchored-on-data.md) | Time windows anchored on the latest award, not on today | Accepted |
 | [0005](0005-rank-suppliers-by-tender-count.md) | Rank suppliers by number of tenders, flag shared and nominal amounts | Accepted |
+| [0006](0006-api-short-read-only-connection-per-request.md) | API opens a short read-only DuckDB connection per request, 503 while the pipeline writes | Accepted |

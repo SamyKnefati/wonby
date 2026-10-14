@@ -73,6 +73,15 @@ def cmd_report(args: argparse.Namespace) -> None:
     print(f"report written to {path}")
 
 
+def cmd_serve(args: argparse.Namespace) -> None:
+    # Imported here so the other commands don't pay for loading FastAPI.
+    import uvicorn
+
+    from . import api
+
+    uvicorn.run(api.create_app(), host=args.host, port=args.port)
+
+
 # --- eval ---------------------------------------------------------------------------
 
 
@@ -250,6 +259,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_report = sub.add_parser("report", help="CSV exports + Markdown report")
     p_report.set_defaults(func=cmd_report)
+
+    p_serve = sub.add_parser("serve", help="read-only HTTP API (docs at /docs)")
+    p_serve.add_argument("--host", default="127.0.0.1")
+    p_serve.add_argument("--port", type=int, default=8001)
+    p_serve.set_defaults(func=cmd_serve)
 
     p_eval = sub.add_parser("eval", help="classifier precision/recall on the labelled set")
     p_eval.add_argument(

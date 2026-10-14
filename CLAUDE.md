@@ -23,8 +23,8 @@ truth.
 ## Stack
 
 Python ≥3.11 (pinned to 3.13 via `.python-version`), uv, DuckDB, httpx, PyYAML,
-pytest. No pandas: DuckDB does the tabular work. No extra HTTP-mocking library:
-tests use `httpx.MockTransport`.
+FastAPI + uvicorn, pytest. No pandas: DuckDB does the tabular work. No extra
+HTTP-mocking library: tests use `httpx.MockTransport`.
 
 ## Commands
 
@@ -36,6 +36,7 @@ uv run wonby build                       # rebuild stg_awards, tender_classifica
 uv run wonby report                      # CSV exports + Markdown report in output/
 uv run wonby eval [--config P] [--against P]   # classifier precision/recall on the labelled set
 uv run wonby sample [--n N] [--seed S]   # fresh tenders to label (excludes already-labelled ones)
+uv run wonby serve [--host H] [--port P]   # read-only HTTP API on 127.0.0.1:8001, docs at /docs
 uv run pytest -q                         # tests (no network)
 uv run ruff check && uv run ruff format --check   # lint + formatting (CI runs both)
 ```
@@ -57,6 +58,7 @@ src/wonby/
   classify.py   pure classification engine (config → is_data + matched patterns) + eval/sample helpers
   build.py      rebuilds stg_awards, tender_classification, radar_params, then runs sql/*.sql
   report.py     CSV exports + Markdown report + report_runs
+  api.py        HTTP API (FastAPI, /v1): read-only JSON, one DuckDB connection per request (ADR 0006)
   cli.py        argparse entry point `wonby`
   sql/          one analysis view per file, file name = view name (mart_*.sql)
 tests/          pytest; fixtures/ holds API samples and the labelled set
@@ -146,7 +148,7 @@ data/, output/  generated, gitignored
 
 ## Conventions
 
-- I/O stays in `datagov.py`, `ingest.py`, `build.py`, `report.py`, `cli.py`;
+- I/O stays in `datagov.py`, `ingest.py`, `build.py`, `report.py`, `api.py`, `cli.py`;
   `clean.py` and `classify.py` are pure and fully unit-tested.
 - Type hints everywhere, `logging` for diagnostics, `print` only for CLI output.
 - SQL: one view per `sql/mart_*.sql` file; views read only `stg_awards`,
@@ -167,7 +169,7 @@ data/, output/  generated, gitignored
 | Agent | Model | Delegate when |
 |---|---|---|
 | `dataset-explorer` | sonnet | profiling / "what does the data look like" — read-only |
-| `pipeline-engineer` | sonnet | datagov, ingest, clean, classify engine, build, cli code + tests |
+| `pipeline-engineer` | sonnet | datagov, ingest, clean, classify engine, build, api, cli code + tests |
 | `classifier-tuner` | sonnet | classification quality: label samples, adjust keywords, measure |
 | `market-analyst` | sonnet | mart views, exports, report, "Cibles prioritaires" |
 | `code-reviewer` | sonnet | after each significant step — read-only review |
