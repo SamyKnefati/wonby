@@ -103,10 +103,13 @@ test suite after every Python edit. Open Claude Code in this directory to use th
 - Containerised deployment on Google Cloud Run
 - Fresher data than the yearly open-data release
 
-## Data licence
+## License
 
-Contains information from "Government Procurement via GeBIZ" accessed on
+Code: [MIT](LICENSE).
+
+Data: contains information from "Government Procurement via GeBIZ" accessed on
 29 September 2026 from [data.gov.sg](https://data.gov.sg), which is made available
 under the terms of the
 [Singapore Open Data Licence version 1.0](https://data.gov.sg/open-data-licence).
-Test fixtures in `tests/fixtures/` contain extracts of this dataset.
+Test fixtures in `tests/fixtures/` contain extracts of this dataset; the MIT
+licence covers the code only, not the data.

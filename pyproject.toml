@@ -3,6 +3,8 @@ name = "wonby"
 version = "0.1.0"
 description = "Who wins Singapore public-sector tenders: incremental DuckDB pipeline over the GeBIZ awards open data"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "Samy Knefati" }
 ]
