@@ -2,7 +2,7 @@ import httpx
 import pytest
 
 from wonby import settings
-from wonby.api import ApiError, RetryConfig, fetch_all_records, fetch_metadata
+from wonby.datagov import ApiError, RetryConfig, fetch_all_records, fetch_metadata
 
 FIELDS = [{"id": fid, "type": "text"} for fid in settings.EXPECTED_FIELD_IDS]
 
