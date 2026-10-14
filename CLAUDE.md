@@ -59,7 +59,7 @@ src/wonby/
   cli.py        argparse entry point `wonby`
   sql/          one analysis view per file, file name = view name (mart_*.sql)
 tests/          pytest; fixtures/ holds API samples and the labelled set
-docs/           dataset_profile.md
+docs/           dataset_profile.md; adr/ = architecture decision records (add one per significant decision)
 data/, output/  generated, gitignored
 ```
 
