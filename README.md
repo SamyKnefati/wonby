@@ -68,7 +68,8 @@ uv sync
 uv run wonby ingest     # incremental load from data.gov.sg into data/wonby.duckdb
 uv run wonby build      # clean, classify, rebuild the analysis views
 uv run wonby report     # output/reports/radar_<date>.md + output/exports/*.csv
-uv run pytest -q        # 123 tests, no network
+uv run wonby serve      # read-only HTTP API on http://127.0.0.1:8001 (docs at /docs)
+uv run pytest -q        # 128 tests, no network
 uv run ruff check && uv run ruff format --check   # lint + formatting, as in CI
 ```
 
@@ -79,6 +80,7 @@ uv run ruff check && uv run ruff format --check   # lint + formatting, as in CI
 | `wonby report` | CSV exports + Markdown report, with changes since the previous report |
 | `wonby eval [--config P] [--against P]` | Classifier precision/recall on the labelled set; `--against` compares two configs |
 | `wonby sample [--n N] [--seed S]` | Unlabelled tenders to label next |
+| `wonby serve [--host H] [--port P]` | Read-only JSON API under `/v1`, OpenAPI docs at `/docs` |
 
 Optional: `DATA_GOV_SG_API_KEY` raises the API rate limits; `WONBY_DB` overrides
 the database path.
